@@ -1,0 +1,769 @@
+openapi: 3.0.3
+info:
+  title: IMDB clone
+  version: 0.0.0
+  description: This is the clone of IMDB using DRF
+paths:
+  /:
+    get:
+      operationId: root_retrieve
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: root_create
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /account/login/:
+    post:
+      operationId: account_login_create
+      tags:
+      - account
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+          description: ''
+  /account/logout/:
+    post:
+      operationId: account_logout_create
+      tags:
+      - account
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /account/register/:
+    post:
+      operationId: account_register_create
+      tags:
+      - account
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/schema/:
+    get:
+      operationId: api_schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - ug
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /list2:
+    get:
+      operationId: list2_list
+      parameters:
+      - name: record
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      tags:
+      - list2
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedWatchListSerializersList'
+          description: ''
+  /review/{id}/:
+    get:
+      operationId: review_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - review
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewsSerializers'
+          description: ''
+    put:
+      operationId: review_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - review
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewsSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReviewsSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReviewsSerializers'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewsSerializers'
+          description: ''
+    patch:
+      operationId: review_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - review
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedReviewsSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedReviewsSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedReviewsSerializers'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewsSerializers'
+          description: ''
+    delete:
+      operationId: review_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - review
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /reviews/:
+    get:
+      operationId: reviews_list
+      tags:
+      - reviews
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReviewsSerializers'
+          description: ''
+  /stream/:
+    get:
+      operationId: stream_list
+      tags:
+      - stream
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StreamPlatFormSerializers'
+          description: ''
+    post:
+      operationId: stream_create
+      tags:
+      - stream
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StreamPlatFormSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StreamPlatFormSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StreamPlatFormSerializers'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StreamPlatFormSerializers'
+          description: ''
+  /stream/{id}/:
+    get:
+      operationId: stream_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this stream plat form.
+        required: true
+      tags:
+      - stream
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StreamPlatFormSerializers'
+          description: ''
+    put:
+      operationId: stream_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this stream plat form.
+        required: true
+      tags:
+      - stream
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StreamPlatFormSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StreamPlatFormSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StreamPlatFormSerializers'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StreamPlatFormSerializers'
+          description: ''
+    patch:
+      operationId: stream_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this stream plat form.
+        required: true
+      tags:
+      - stream
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedStreamPlatFormSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedStreamPlatFormSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedStreamPlatFormSerializers'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StreamPlatFormSerializers'
+          description: ''
+    delete:
+      operationId: stream_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this stream plat form.
+        required: true
+      tags:
+      - stream
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /stream/{id}/reviews/:
+    get:
+      operationId: stream_reviews_list
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - stream
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReviewsSerializers'
+          description: ''
+  /stream/{id}/reviews-create:
+    post:
+      operationId: stream_reviews_create_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - stream
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewsSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReviewsSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReviewsSerializers'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewsSerializers'
+          description: ''
+  /watchlist/{id}/:
+    get:
+      operationId: watchlist_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - watchlist
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: watchlist_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - watchlist
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: watchlist_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - watchlist
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    AuthToken:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        token:
+          type: string
+          readOnly: true
+      required:
+      - password
+      - token
+      - username
+    PaginatedWatchListSerializersList:
+      type: object
+      properties:
+        next:
+          type: string
+          nullable: true
+        previous:
+          type: string
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/WatchListSerializers'
+    PatchedReviewsSerializers:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        rating:
+          type: integer
+          maximum: 5
+          minimum: 1
+        description:
+          type: string
+          nullable: true
+          maxLength: 200
+        active:
+          type: boolean
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        update:
+          type: string
+          format: date-time
+          readOnly: true
+        review_user:
+          type: integer
+        watchlist:
+          type: integer
+    PatchedStreamPlatFormSerializers:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        watchlist:
+          type: array
+          items:
+            $ref: '#/components/schemas/WatchListSerializers'
+          readOnly: true
+        name:
+          type: string
+          maxLength: 20
+        about:
+          type: string
+          maxLength: 150
+        website:
+          type: string
+          format: uri
+          maxLength: 100
+    ReviewsSerializers:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        rating:
+          type: integer
+          maximum: 5
+          minimum: 1
+        description:
+          type: string
+          nullable: true
+          maxLength: 200
+        active:
+          type: boolean
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        update:
+          type: string
+          format: date-time
+          readOnly: true
+        review_user:
+          type: integer
+        watchlist:
+          type: integer
+      required:
+      - created
+      - id
+      - rating
+      - review_user
+      - update
+      - watchlist
+    StreamPlatFormSerializers:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        watchlist:
+          type: array
+          items:
+            $ref: '#/components/schemas/WatchListSerializers'
+          readOnly: true
+        name:
+          type: string
+          maxLength: 20
+        about:
+          type: string
+          maxLength: 150
+        website:
+          type: string
+          format: uri
+          maxLength: 100
+      required:
+      - about
+      - name
+      - url
+      - watchlist
+      - website
+    WatchListSerializers:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        length_name:
+          type: string
+          readOnly: true
+        title:
+          type: string
+          maxLength: 50
+        description:
+          type: string
+          maxLength: 200
+        active:
+          type: boolean
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        platform:
+          type: integer
+      required:
+      - created
+      - description
+      - id
+      - length_name
+      - platform
+      - title
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
