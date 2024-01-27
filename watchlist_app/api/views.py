@@ -90,7 +90,7 @@ class StreamPlatFormList(APIView):
             serializer.save()
             return Response(status = status.HTTP_201_CREATED)
         else:
-            return Response(serializers.errors, status = status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 class StreamPlatFormDetails(APIView):
     def get(self, request, pk):

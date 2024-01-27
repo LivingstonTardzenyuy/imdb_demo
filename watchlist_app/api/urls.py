@@ -12,7 +12,7 @@ urlpatterns = [
     path('list2', WatchListAV.as_view(), name='movie-details'),
 
 # ReviewsListDetails
-    # path('streamplatform/', StreamPlatFormList.as_view(), name = 'streamplatform'),
+    path('streamplatform/', StreamPlatFormList.as_view(), name = 'streamplatform'),
     # path('streamplatform/<int:pk>/reviews/', StreamPlatFormDetails.as_view(), name = 'streamplatform-detail'),          #allows me to access alll reviews for a particular movie. 
     
     path('', include(router.urls)),
